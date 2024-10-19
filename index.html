@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация о пользователе</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .info-item {
+            margin: 10px 0;
+        }
+
+        .flag {
+            width: 20px;
+            height: 15px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Информация о пользователе</h1>
+        <div id="userInfo"></div>
+    </div>
+    <script>
+        async function getUserInfo() {
+            // Получение IP-адреса
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            const ipAddress = ipData.ip;
+
+            // Получение информации о местоположении по IP
+            const locationResponse = await fetch(`http://ip-api.com/json/${ipAddress}`);
+            const locationData = await locationResponse.json();
+
+            // Получение информации о браузере
+            const userAgent = navigator.userAgent;
+            const browserInfo = userAgent.match(/(Chrome|Firefox|Safari|Edge|MSIE|Trident)\/?\s*(\d+)/i);
+            const browserName = browserInfo ? browserInfo[1] : 'Неизвестный';
+            const browserVersion = browserInfo ? browserInfo[2] : 'Неизвестная версия';
+            const platform = navigator.platform;
+            const language = navigator.language || navigator.userLanguage;
+
+            // Определение типа устройства
+            const isMobile = /Mobi|Android/i.test(userAgent) ? 'Мобильное' : 'Настольное';
+            
+            // Получение версии операционной системы
+            let osVersion = '';
+            if (navigator.appVersion.indexOf("Win") !== -1) osVersion = "Windows";
+            else if (navigator.appVersion.indexOf("Mac") !== -1) osVersion = "MacOS";
+            else if (navigator.appVersion.indexOf("X11") !== -1 || navigator.appVersion.indexOf("Linux") !== -1) osVersion = "Linux";
+            else osVersion = "Неизвестная ОС";
+
+            // Текущая дата и время
+            const currentDateTime = new Date().toLocaleString();
+
+            // Разрешение экрана
+            const screenResolution = `${window.screen.width}x${window.screen.height}`;
+
+            // Проверка наличия куков
+            const cookiesEnabled = navigator.cookieEnabled ? 'Включены' : 'Выключены';
+
+            // Получение текущего URL
+            const currentURL = window.location.href;
+
+            // Получение версии JavaScript (в большинстве случаев это ES6)
+            const jsVersion = 'ES6+ (современный)';
+
+            // Отображение информации на странице
+            document.getElementById('userInfo').innerHTML = `
+                <div class="info-item"><strong>IP-адрес:</strong> ${ipAddress}</div>
+                <div class="info-item"><strong>Город:</strong> ${locationData.city}</div>
+                <div class="info-item"><strong>Страна:</strong> <img class="flag" src="https://flagcdn.com/w20/${locationData.countryCode.toLowerCase()}.png" alt="${locationData.countr
+
+y}" /> ${locationData.country} (${locationData.countryCode})</div>
+                <div class="info-item"><strong>Регион:</strong> ${locationData.regionName}</div>
+                <div class="info-item"><strong>Широта:</strong> ${locationData.lat}</div>
+                <div class="info-item"><strong>Долгота:</strong> ${locationData.lon}</div>
+                <div class="info-item"><strong>Часовой пояс:</strong> ${locationData.timezone}</div>
+                <div class="info-item"><strong>Провайдер:</strong> ${locationData.isp}</div>
+                <div class="info-item"><strong>Организация:</strong> ${locationData.org || 'Не указана'}</div>
+                <div class="info-item"><strong>Почтовый индекс:</strong> ${locationData.zip}</div>
+                <div class="info-item"><strong>Дата и время:</strong> ${currentDateTime}</div>
+                <div class="info-item"><strong>Язык браузера:</strong> ${language}</div>
+                <div class="info-item"><strong>Платформа:</strong> ${platform}</div>
+                <div class="info-item"><strong>Браузер:</strong> ${browserName} (версия ${browserVersion})</div>
+                <div class="info-item"><strong>Тип устройства:</strong> ${isMobile}</div>
+                <div class="info-item"><strong>Версия ОС:</strong> ${osVersion}</div>
+                <div class="info-item"><strong>Разрешение экрана:</strong> ${screenResolution}</div>
+                <div class="info-item"><strong>Куки:</strong> ${cookiesEnabled}</div>
+                <div class="info-item"><strong>Текущий URL:</strong> ${currentURL}</div>
+                <div class="info-item"><strong>Версия JavaScript:</strong> ${jsVersion}</div>
+            `;
+        }
+
+        // Вызов функции при загрузке страницы
+        window.onload = getUserInfo;
+    </script>
+</body>
+</html>
+
+Если у вас есть еще идеи или пожелания по улучшению, дайте знать!
