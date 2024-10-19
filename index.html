@@ -33,44 +33,25 @@
         <div id="userInfo"></div>
     </div>
     <script>
-        async function getUserInfo() {
-            try {
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                const ipAddress = ipData.ip;
+        function getUserInfo() {
+            const userAgent = navigator.userAgent;
+            const platform = navigator.platform;
+            const language = navigator.language || navigator.userLanguage;
 
-                const locationResponse = await fetch(http://ip-api.com/json/${ipAddress});
-                const locationData = await locationResponse.json();
+            const currentDateTime = new Date().toLocaleString();
+            const screenResolution = ${window.screen.width}x${window.screen.height};
+            const cookiesEnabled = navigator.cookieEnabled ? 'Включены' : 'Выключены';
+            const currentURL = window.location.href;
 
-                const userAgent = navigator.userAgent;
-                const browserInfo = userAgent.match(/(Chrome|Firefox|Safari|Edge|MSIE|Trident)/?s*(d+)/i);
-                const browserName = browserInfo ? browserInfo[1] : 'Неизвестный';
-                const browserVersion = browserInfo ? browserInfo[2] : 'Неизвестная версия';
-                const platform = navigator.platform;
-                const language = navigator.language || navigator.userLanguage;
-
-                const currentDateTime = new Date().toLocaleString();
-                const screenResolution = ${window.screen.width}x${window.screen.height};
-                const cookiesEnabled = navigator.cookieEnabled ? 'Включены' : 'Выключены';
-                const currentURL = window.location.href;
-
-                document.getElementById('userInfo').innerHTML = 
-                    <div class="info-item"><strong>IP-адрес:</strong> ${ipAddress}</div>
-                    <div class="info-item"><strong>Город:</strong> ${locationData.city}</div>
-                    <div class="info-item"><strong>Страна:</strong> ${locationData.country} (${locationData.countryCode})</div>
-                    <div class="info-item"><strong>Регион:</strong> ${locationData.regionName}</div>
-                    <div class="info-item"><strong>Дата и время:</strong> ${currentDateTime}</div>
-                    <div class="info-item"><strong>Язык браузера:</strong> ${language}</div>
-                    <div class="info-item"><strong>Платформа:</strong> ${platform}</div>
-                    <div class="info-item"><strong>Браузер:</strong> ${browserName} (версия ${browserVersion})</div>
-                    <div class="info-item"><strong>Разрешение экрана:</strong> ${screenResolution}</div>
-                    <div class="info-item"><strong>Куки:</strong> ${cookiesEnabled}</div>
-                    <div class="info-item"><strong>Текущий URL:</strong> ${currentURL}</div>
-                ;
-            } catch (error) {
-                console.error('Ошибка получения информации:', error);
-                document.getElementById('userInfo').innerHTML = '<p>Не удалось получить информацию о пользователе.</p>';
-            }
+            document.getElementById('userInfo').innerHTML = 
+                <div class="info-item"><strong>Дата и время:</strong> ${currentDateTime}</div>
+                <div class="info-item"><strong>Язык браузера:</strong> ${language}</div>
+                <div class="info-item"><strong>Платформа:</strong> ${platform}</div>
+                <div class="info-item"><strong>User Agent:</strong> ${userAgent}</div>
+                <div class="info-item"><strong>Разрешение экрана:</strong> ${screenResolution}</div>
+                <div class="info-item"><strong>Куки:</strong> ${cookiesEnabled}</div>
+                <div class="info-item"><strong>Текущий URL:</strong> ${currentURL}</div>
+            ;
         }
 
         window.onload = getUserInfo;
